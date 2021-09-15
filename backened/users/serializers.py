@@ -1,4 +1,4 @@
-from rest_framework.serializers import HyperlinkedModelSerializer, ModelSerializer
+from rest_framework.serializers import ModelSerializer
 
 from .models import User
 
