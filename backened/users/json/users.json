@@ -1,0 +1,23 @@
+[
+  {
+    "email": "mail1@mail.ru",
+    "username": "Mike3000",
+    "firstname": "Mike",
+    "lastname": "Miken",
+    "password": "123dscfds"
+  },
+  {
+    "email": "mail2@mail.ru",
+    "username": "Mike2000",
+    "firstname": "Mikes",
+    "lastname": "Mikenus",
+    "password": "123ddscfds"
+  },
+  {
+    "email": "mail3@mail.ru",
+    "username": "Mike22000",
+    "firstname": "Miker",
+    "lastname": "Mikenrs",
+    "password": "1d23dscfds"
+  }
+]
