@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, StringRelatedField
 
 from .models import Project, Todo
 from users.serializers import UserModelSerializer
@@ -6,6 +6,7 @@ from users.serializers import UserModelSerializer
 
 class ProjectModelSerializer(ModelSerializer):
     users = UserModelSerializer(many=True)
+    # users = StringRelatedField(many=True)
 
     class Meta:
         model = Project
