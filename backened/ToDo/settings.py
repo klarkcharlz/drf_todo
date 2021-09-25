@@ -37,9 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # add applications
     'rest_framework',
+    "django_filters",
     'corsheaders',
     # my applications
-    'users.apps.UsersConfig'
+    'users.apps.UsersConfig',
+    'todo_app.apps.TodoAppConfig'
 ]
 
 MIDDLEWARE = [
@@ -131,3 +133,12 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://127.0.0.1:3000'
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer'
+    ]
+}
+
+if DEBUG:
+    REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'].append('rest_framework.renderers.BrowsableAPIRenderer')
