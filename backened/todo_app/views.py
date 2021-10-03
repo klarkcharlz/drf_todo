@@ -8,6 +8,7 @@ from rest_framework import viewsets
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework import mixins
 from django.db import models as django_models
+from rest_framework.permissions import DjangoModelPermissions
 
 
 class ProjectFilter(filters.FilterSet):
@@ -24,6 +25,7 @@ class PageLimitOffsetPagination(LimitOffsetPagination):
 
 class ProjectViewSet(mixins.UpdateModelMixin, mixins.CreateModelMixin, mixins.ListModelMixin,
                      mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    permission_classes = [DjangoModelPermissions]
     queryset = Project.objects.all()
     serializer_class = ProjectModelSerializer
     filterset_class = ProjectFilter
@@ -50,6 +52,7 @@ class TodoFilter(filters.FilterSet):
 
 class TodoViewSet(mixins.UpdateModelMixin, mixins.CreateModelMixin, mixins.ListModelMixin,
                   mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    permission_classes = [DjangoModelPermissions]
     queryset = Todo.objects.all()
     serializer_class = TodoModelSerializer
     pagination_class = TodoLimitOffsetPagination
