@@ -7,8 +7,9 @@ import UseProjectsList from './components/UserProjects.js'
 import TodoList from './components/Todo.js'
 import Footer from './components/Footer.js'
 import Menu from './components/Menu.js'
+import LoginForm from './components/LoginForm.js'
 import axios from 'axios'
-import {HashRouter, Route, Link, Switch, Redirect, BrowserRouter} from 'react-router-dom'
+import {Route, Link, Switch, Redirect, BrowserRouter} from 'react-router-dom'
 
 
 const NotFound = ({location}) => {
@@ -22,12 +23,41 @@ class App extends React.Component {
         this.state = {
             'users': [],
             'projects': [],
-            'todos': []
+            'todos': [],
+            'token': ''
         }
     }
 
-    componentDidMount() {
-        axios.get('http://127.0.0.1:8000/api/users/')
+    getToken(login, password) {
+        axios.post('http://127.0.0.1:8000/api-token-auth/', {"username": login, "password": password})
+            .then(response => {
+                console.log(response.data.token)
+                localStorage.setItem('token', response.data.token)
+                this.setState({'token': response.data.token}, this.loadData)
+            })
+            .catch(error => alert("Wrong password"))
+    }
+
+    logout() {
+        localStorage.setItem('token', '')
+        this.setState({'token': ''}, this.loadData)
+    }
+
+    isAuthenticated() {
+        return !!this.state.token
+    }
+
+    getHeaders() {
+        if (this.isAuthenticated()) {
+            return {'Authorization': 'Token ' + this.state.token}
+        }
+        return {}
+    }
+
+    loadData() {
+        const headers = this.getHeaders()
+
+        axios.get('http://127.0.0.1:8000/api/users/', {headers})
             .then(response => {
                 const users = response.data.results
                 this.setState(
@@ -37,7 +67,7 @@ class App extends React.Component {
                 )
             }).catch(error => console.log(error))
 
-        axios.get('http://127.0.0.1:8000/api/projects/')
+        axios.get('http://127.0.0.1:8000/api/projects/', {headers})
             .then(response => {
                 const projects = response.data.results
                 this.setState(
@@ -47,7 +77,7 @@ class App extends React.Component {
                 )
             }).catch(error => console.log(error))
 
-        axios.get('http://127.0.0.1:8000/api/todo/')
+        axios.get('http://127.0.0.1:8000/api/todo/', {headers})
             .then(response => {
                 const todos = response.data.results
                 this.setState(
@@ -58,21 +88,32 @@ class App extends React.Component {
             }).catch(error => console.log(error))
     }
 
+    componentDidMount() {
+        const token = localStorage.getItem('token')
+        console.log(token)
+        this.setState({'token': token}, this.loadData)
+    }
+
     render() {
         return (
             <div>
                 <BrowserRouter>
+
+                    {this.isAuthenticated() ?
+                        <button onClick={() => this.logout()}>Logout</button> :
+                        <Link to='/login'>Login</Link>
+                    }
+
                     <Menu/>
 
                     <Switch>
                         <Route path='/' exact component={() => <UserList users={this.state.users}/>}/>
                         <Route path='/projects/' component={() => <ProjectList projects={this.state.projects}/>}/>
                         <Route path='/todo/' component={() => <TodoList todos={this.state.todos}/>}/>
-
                         <Route path='/user/:id' component={() => <UseProjectsList projects={this.state.projects}/>}/>
-
-
                         <Redirect from='/users' to='/'/>
+                        <Route path='/login' exact component={() => <LoginForm
+                            getToken={(login, password) => this.getToken(login, password)}/>}/>
                         <Route component={NotFound}/>
                     </Switch>
 
