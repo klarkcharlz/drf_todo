@@ -5,10 +5,10 @@ const TodoItem = ({todo}) => {
     return (
         <tr>
             <td>
-                {todo.project}
+                {todo.project.name}
             </td>
             <td>
-                {todo.user}
+                {todo.user.username}
             </td>
             <td>
                 {todo.text}
