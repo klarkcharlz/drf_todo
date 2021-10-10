@@ -1,5 +1,9 @@
 import React from 'react'
 
+const UserItem = ({user}) => {
+    return user.username
+}
+
 
 const ProjectItem = ({project}) => {
     return (
@@ -11,7 +15,7 @@ const ProjectItem = ({project}) => {
                 {project.url}
             </td>
             <td>
-                {project.users}
+                {project.users.map((user) => <UserItem user={user}/>)}
             </td>
         </tr>
     )

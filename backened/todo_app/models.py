@@ -1,12 +1,12 @@
 from django.db import models
-from users.models import User
+from users.models import CustomUser
 
 
 # Create your models here.
 class Project(models.Model):
     name = models.CharField(max_length=64, verbose_name="Название")
     url = models.URLField(verbose_name="Ссылка на репозиторий", blank=True)
-    users = models.ManyToManyField(User, verbose_name="Пользователи")
+    users = models.ManyToManyField(CustomUser, verbose_name="Пользователи")
 
     def __str__(self):
         return f"{self.name}"
@@ -18,7 +18,7 @@ class Project(models.Model):
 
 class Todo(models.Model):
     project = models.OneToOneField(Project, on_delete=models.CASCADE, verbose_name="Проект", related_name='todo')
-    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="Пользователь", related_name='todo')
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, verbose_name="Пользователь", related_name='todo')
     text = models.CharField(max_length=255, verbose_name="Текст заметки")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата публикации')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Дата обновления')

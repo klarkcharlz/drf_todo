@@ -1,11 +1,11 @@
-from rest_framework.serializers import ModelSerializer, StringRelatedField
+from rest_framework.serializers import ModelSerializer
 
-from .models import Project, Todo
+from todo_app.models import Project, Todo
 from users.serializers import UserModelSerializer
 
 
 class ProjectModelSerializer(ModelSerializer):
-    # users = UserModelSerializer(many=True)
+    users = UserModelSerializer(many=True)
 
     class Meta:
         model = Project
@@ -13,8 +13,8 @@ class ProjectModelSerializer(ModelSerializer):
 
 
 class TodoModelSerializer(ModelSerializer):
-    # project = ProjectModelSerializer()
-    # user = UserModelSerializer()
+    project = ProjectModelSerializer()
+    user = UserModelSerializer()
 
     class Meta:
         model = Todo

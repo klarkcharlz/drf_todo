@@ -1,5 +1,5 @@
-from .models import User
-from .serializers import UserModelSerializer
+from users.models import CustomUser
+from users.serializers import UserModelSerializer
 from rest_framework import viewsets
 from rest_framework import mixins
 from rest_framework.permissions import DjangoModelPermissions
@@ -8,5 +8,5 @@ from rest_framework.permissions import DjangoModelPermissions
 class UserViewSet(mixins.UpdateModelMixin, mixins.ListModelMixin,
                   mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     permission_classes = [DjangoModelPermissions]
-    queryset = User.objects.all()
+    queryset = CustomUser.objects.all()
     serializer_class = UserModelSerializer

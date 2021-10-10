@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 
 
-class User(AbstractBaseUser):
+class CustomUser(AbstractBaseUser):
     email = models.EmailField(unique=True, verbose_name="Электроная почта")
     username = models.CharField(max_length=64, verbose_name="Ник")
     firstname = models.CharField(max_length=64, verbose_name="Имя")

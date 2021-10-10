@@ -1,5 +1,5 @@
-from .models import Project, Todo
-from .serializers import ProjectModelSerializer, TodoModelSerializer
+from todo_app.models import Project, Todo
+from todo_app.serializers import ProjectModelSerializer, TodoModelSerializer
 from rest_framework.response import Response
 from rest_framework.generics import get_object_or_404
 from django_filters import rest_framework as filters
