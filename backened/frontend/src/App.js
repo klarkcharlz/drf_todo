@@ -120,12 +120,7 @@ class App extends React.Component {
             <div>
                 <BrowserRouter>
 
-                    {this.isAuthenticated() ?
-                        <button onClick={() => this.logout()}>Logout</button> :
-                        <Link to='/login'>Login</Link>
-                    }
-
-                    <Menu/>
+                    <Menu obj={this}/>
 
                     <Switch>
                         <Route path='/' exact component={() => <UserList users={this.state.users}/>}/>

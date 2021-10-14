@@ -19,3 +19,10 @@ class TodoModelSerializer(ModelSerializer):
     class Meta:
         model = Todo
         fields = ['id', 'project', 'user', 'text', 'is_active']
+
+
+class TodoModelCreateSerializer(ModelSerializer):
+
+    class Meta:
+        model = Todo
+        fields = ['id', 'project', 'user', 'text']
