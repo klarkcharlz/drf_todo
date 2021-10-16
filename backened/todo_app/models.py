@@ -17,8 +17,8 @@ class Project(models.Model):
 
 
 class Todo(models.Model):
-    project = models.OneToOneField(Project, on_delete=models.CASCADE, verbose_name="Проект", related_name='todo')
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, verbose_name="Пользователь", related_name='todo')
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name="Проект", related_name='todo')
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="Пользователь", related_name='todo')
     text = models.CharField(max_length=255, verbose_name="Текст заметки")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата публикации')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Дата обновления')
