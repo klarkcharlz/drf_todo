@@ -7,6 +7,8 @@ class CustomUser(AbstractBaseUser):
     username = models.CharField(max_length=64, verbose_name="Ник")
     firstname = models.CharField(max_length=64, verbose_name="Имя")
     lastname = models.CharField(max_length=64, verbose_name="Фамилия")
+    is_superuser = models.BooleanField(default=False, verbose_name='Суперпользователь')
+    is_staff = models.BooleanField(default=False, verbose_name='Сотрудник')
 
     REQUIRED_FIELDS = ['username', 'firstname', 'lastname']
     USERNAME_FIELD = 'email'
