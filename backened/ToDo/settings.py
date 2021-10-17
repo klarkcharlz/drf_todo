@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django_filters",
     'corsheaders',
     'drf_yasg',
+    "graphene_django",
     # my applications
     'users.apps.UsersConfig',
     'todo_app.apps.TodoAppConfig'
@@ -154,6 +155,10 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 100,
 
+}
+
+GRAPHENE = {
+    "SCHEMA": "todo_app.schema.schema"
 }
 
 if DEBUG:
