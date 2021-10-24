@@ -1,10 +1,11 @@
 from todo_app.models import Project, Todo
-from todo_app.serializers import ProjectModelSerializer, TodoModelSerializer, TodoModelCreateSerializer
+from todo_app.serializers import ProjectModelSerializer, TodoModelSerializer, \
+    TodoModelCreateSerializer, ProjectModelCreateSerializer
 from rest_framework.response import Response
 from rest_framework.generics import get_object_or_404
 from django_filters import rest_framework as filters
 import django_filters
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework import mixins
 from django.db import models as django_models
@@ -23,7 +24,7 @@ class PageLimitOffsetPagination(LimitOffsetPagination):
     default_limit = 10
 
 
-class ProjectViewSet(mixins.UpdateModelMixin, mixins.CreateModelMixin, mixins.ListModelMixin,
+class ProjectViewSet(mixins.DestroyModelMixin, mixins.UpdateModelMixin, mixins.ListModelMixin,
                      mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     permission_classes = [DjangoModelPermissions]
     queryset = Project.objects.all()
@@ -50,7 +51,7 @@ class TodoFilter(filters.FilterSet):
     }
 
 
-class TodoViewSet(mixins.UpdateModelMixin, mixins.CreateModelMixin, mixins.ListModelMixin,
+class TodoViewSet(mixins.DestroyModelMixin, mixins.UpdateModelMixin, mixins.ListModelMixin,
                   mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     permission_classes = [DjangoModelPermissions]
     queryset = Todo.objects.all()
@@ -58,12 +59,26 @@ class TodoViewSet(mixins.UpdateModelMixin, mixins.CreateModelMixin, mixins.ListM
     pagination_class = TodoLimitOffsetPagination
     filter_class = TodoFilter
 
-    def destroy(self, request, pk=None):
-        Todo.objects.filter(pk=pk).update(is_active=False)
-        todo = get_object_or_404(Todo, pk=pk)
-        serializer = TodoModelSerializer(todo)
-        return Response(serializer.data)
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        print("DELETE")
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def perform_destroy(self, instance):
+        instance.is_active = False
+        instance.save()
 
 
-class TodoViewSetCreate(mixins.CreateModelMixin, viewsets.GenericViewSet):
+class TodoViewSetCreate(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin,
+                        viewsets.GenericViewSet):
+    queryset = Todo.objects.all()
     serializer_class = TodoModelCreateSerializer
+    permission_classes = [DjangoModelPermissions]
+
+
+class ProjectViewSetCreate(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin,
+                           viewsets.GenericViewSet):
+    queryset = Project.objects.all()
+    serializer_class = ProjectModelCreateSerializer
+    permission_classes = [DjangoModelPermissions]
