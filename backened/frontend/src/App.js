@@ -10,6 +10,8 @@ import Menu from './components/Menu.js'
 import LoginForm from './components/LoginForm.js'
 import axios from 'axios'
 import {Route, Link, Switch, Redirect, BrowserRouter} from 'react-router-dom'
+import TodoForm from "./components/TodoForm";
+import ProjectForm from "./components/ProjectFrom";
 
 
 const NotFound = ({location}) => {
@@ -27,6 +29,7 @@ class App extends React.Component {
             'token': ''
         }
     }
+
 
     getToken(login, password) {
         axios.post('http://127.0.0.1:8000/api-token-auth/', {"username": login, "password": password})
@@ -52,6 +55,42 @@ class App extends React.Component {
             return {'Authorization': 'Token ' + this.state.token}
         }
         return {}
+    }
+
+    deleteProject(id) {
+        const headers = this.getHeaders()
+        axios.delete(`http://127.0.0.1:8000/api/projects/${id}/`, {headers})
+            .then(response => {
+                this.setState({projects: this.state.projects.filter((item) => item.id !== id)})
+            }).catch(error => console.log(error))
+    }
+
+    deleteTodo(id) {
+        const headers = this.getHeaders()
+        axios.delete(`http://127.0.0.1:8000/api/todo/${id}/`, {headers})
+            .then(response => {
+                this.loadData();
+            }).catch(error => console.log(error))
+    }
+
+    createTodo(project, user, text) {
+        const headers = this.getHeaders()
+        const data = {project: project, user: user, text: text}
+        axios.post(`http://127.0.0.1:8000/api/create_todo/`, data, {headers})
+            .then(response => {
+                console.log(response.data)
+                this.loadData();
+            }).catch(error => console.log(error))
+    }
+
+    createProject(name, url, users) {
+        const headers = this.getHeaders()
+        const data = {name: name, url: url, users: users}
+        axios.post(`http://127.0.0.1:8000/api/create_project/`, data, {headers})
+            .then(response => {
+                console.log(response.data)
+                this.loadData();
+            }).catch(error => console.log(error))
     }
 
     loadData() {
@@ -124,12 +163,22 @@ class App extends React.Component {
 
                     <Switch>
                         <Route path='/' exact component={() => <UserList users={this.state.users}/>}/>
-                        <Route path='/projects/' component={() => <ProjectList projects={this.state.projects}/>}/>
-                        <Route path='/todo/' component={() => <TodoList todos={this.state.todos}/>}/>
+                        <Route path='/projects/' exact component={() => <ProjectList projects={this.state.projects}
+                                                                               deleteProject={(id) => this.deleteProject(id)}/>}/>
+                        <Route path='/todo/' exact component={() => <TodoList todos={this.state.todos}
+                                                                              deleteTodo={(id) => this.deleteTodo(id)}/>}/>
                         <Route path='/user/:id' component={() => <UseProjectsList projects={this.state.projects}/>}/>
                         <Redirect from='/users' to='/'/>
                         <Route path='/login' exact component={() => <LoginForm
                             getToken={(login, password) => this.getToken(login, password)}/>}/>
+
+                        <Route exact path='/todo/create' component={() => <TodoForm
+                            createTodo={(project, user, text) => this.createTodo(project, user, text)}
+                            projects={this.state.projects} users={this.state.users}/>}/>
+
+                        <Route exact path='/project/create' component={() => <ProjectForm
+                            createProject={(name, url, users) => this.createProject(name, url, users)}
+                            users={this.state.users}/>}/>
                         <Route component={NotFound}/>
                     </Switch>
 

@@ -12,7 +12,7 @@ const ProjectItem = ({project}) => {
                 {project.url}
             </td>
             <td>
-                {project.users}
+                {project.users.map((user) => user.id)}
             </td>
         </tr>
     )
@@ -21,8 +21,12 @@ const ProjectItem = ({project}) => {
 
 const UserProjectList = ({projects}) => {
     let {id} = useParams()
-    let filtered_projects = projects.filter((project) => project.users.includes(parseInt(id)))
-
+    let filtered_projects = []
+    projects.forEach((project) => {
+        if(project.users.map((user) => user.id).includes(parseInt(id))){
+            filtered_projects.push(project);
+        }
+    })
     return (
         <table>
             <th>
