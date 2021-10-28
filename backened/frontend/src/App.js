@@ -121,6 +121,9 @@ class App extends React.Component {
                         'projects': projects
                     }
                 )
+                if(response.data.next){
+                    console.log(response.data.next)
+                }
             }).catch(error => {
             console.log(error)
             this.setState(
