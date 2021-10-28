@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate
-from users.models import CustomUser
-from users.views import UserViewSet
+from backened.users.models import CustomUser
+from backened.users.views import UserViewSet
 from django.contrib.auth.models import User as SuperUser
 
 

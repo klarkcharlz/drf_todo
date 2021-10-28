@@ -2,9 +2,8 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 from mixer.backend.django import mixer
-from todo_app.models import Project, Todo
+from backened.todo_app.models import Project, Todo
 from django.contrib.auth.models import User as SuperUser
-from users.models import CustomUser
 
 
 class TestAuthorViewSet(TestCase):

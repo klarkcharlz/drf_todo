@@ -4,7 +4,7 @@ import os
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 
-from users.models import User as AbstractUser
+from backened.users.models import User as AbstractUser
 
 JSON_PATH = 'users/json'
 
